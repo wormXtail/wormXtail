@@ -1,1 +1,3 @@
 bokeh
+pip
+conda
