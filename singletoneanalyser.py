@@ -2,7 +2,8 @@
 
 import streamlit as st
 import numpy as np
-from bokeh.plotting import figure
+# from bokeh.plotting import figure
+import pandas as pd
 
 def singleToneAnalyser():
     
@@ -55,39 +56,45 @@ def singleToneAnalyser():
     noise = np.random.normal(0.0,noise_level,samprate)
     signal = y + noise
     
-    sine = figure(
-        title='Sinewave Time Representation',
-        x_axis_label='Timp [s]',
-        y_axis_label='Amplitudine [mW]',
-        x_range=(0,duration),
-        y_range=(-amplitude-amplitude/3,amplitude+amplitude/3)
-        )
-    noise_fig = figure(
-        title='Sinewave Noise',
-        x_axis_label='Timp [s]',
-        y_axis_label='Amplitudine [mW]',
-        x_range=(0,duration),
-        y_range=(-amplitude-1,amplitude+1)
-        )
-    sine_noise = figure(
-        title='Sinewave & Noise',
-        x_axis_label='Timp [s]',
-        y_axis_label='Amplitudine [mW]',
-        x_range=(0,duration),
-        y_range=(-amplitude-1,amplitude+1)
-        )
+    # sine = figure(
+    #     title='Sinewave Time Representation',
+    #     x_axis_label='Timp [s]',
+    #     y_axis_label='Amplitudine [mW]',
+    #     x_range=(0,duration),
+    #     y_range=(-amplitude-amplitude/3,amplitude+amplitude/3)
+    #     )
+    # noise_fig = figure(
+    #     title='Sinewave Noise',
+    #     x_axis_label='Timp [s]',
+    #     y_axis_label='Amplitudine [mW]',
+    #     x_range=(0,duration),
+    #     y_range=(-amplitude-1,amplitude+1)
+    #     )
+    # sine_noise = figure(
+    #     title='Sinewave & Noise',
+    #     x_axis_label='Timp [s]',
+    #     y_axis_label='Amplitudine [mW]',
+    #     x_range=(0,duration),
+    #     y_range=(-amplitude-1,amplitude+1)
+    #     )
+    chart_signal = pd.DataFrame(y, time)
+    chart_noise = pd.DataFrame(noise, time)
+    chart_signoise = pd.DataFrame(signal, time)
 
-    sine.line(time, y, legend_label='Sinewave', line_width=1)
-    noise_fig.line(time, noise, legend_label='Noise', line_width=1)
-    sine_noise.line(time,signal, legend_label='Signal + Noise', line_width=1)
+    # sine.line(time, y, legend_label='Sinewave', line_width=1)
+    # noise_fig.line(time, noise, legend_label='Noise', line_width=1)
+    # sine_noise.line(time,signal, legend_label='Signal + Noise', line_width=1)
 
     if freq <= samprate/2:
         if option == 'Signal Only':
-            st.bokeh_chart(sine, use_container_width=True)
+            # st.bokeh_chart(sine, use_container_width=True)
+            st.area_chart(chart_signal)
         elif option == 'Noise Only':
-            st.bokeh_chart(noise_fig, use_container_width=True)
+            # st.bokeh_chart(noise_fig, use_container_width=True)
+            st.area_chart(chart_noise)
         elif option == 'With Noise':
-            st.bokeh_chart(sine_noise, use_container_width=True)
+            # st.bokeh_chart(sine_noise, use_container_width=True)
+            st.area_chart(chart_signoise)
         
     elif freq < 0 or samprate <= 0 or freq >= samprate/2:
         st.error('Sample rate must be at least 2 times greater than maximum Frequency')
