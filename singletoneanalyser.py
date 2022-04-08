@@ -1,8 +1,13 @@
-# Sinewave analyser v1.0, made with Streamlit
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Apr  8 10:09:44 2022
+
+@author: Nedelcu Liviu
+"""
+# Sinewave analyser v1.1, made with Streamlit
 
 import streamlit as st
 import numpy as np
-# from bokeh.plotting import figure
 import pandas as pd
 
 def singleToneAnalyser():
@@ -19,8 +24,12 @@ def singleToneAnalyser():
     st.sidebar.header(""" Plot Type""")
     
     option = st.sidebar.radio(
-        'Plot Type',
+        'Signals',
         ('Signal Only', 'Noise Only', 'With Noise'))
+    
+    option_chart = st.sidebar.radio(
+        'Graphics',
+        ('Line', 'Area'))
     
     st.sidebar.header(""" PARAMETERS """)
     
@@ -41,7 +50,7 @@ def singleToneAnalyser():
     
     noise_level = st.sidebar.number_input("Noise Level",0.0,10.0,0.1,0.01)
 
-    sample_rate = st.sidebar.selectbox("Sample Rate", ['12000','24000','44100','48000','128000','192000','Other'])
+    sample_rate = st.sidebar.selectbox("Sample Rate", ['500','1000','12000','24000','44100','48000','128000','192000','Other'])
     if sample_rate == 'Other':
         numinput = st.sidebar.number_input("Choose your own sample rate",0,6000000,44100,1)
         samprate = numinput
@@ -56,46 +65,25 @@ def singleToneAnalyser():
     noise = np.random.normal(0.0,noise_level,samprate)
     signal = y + noise
     
-    # sine = figure(
-    #     title='Sinewave Time Representation',
-    #     x_axis_label='Timp [s]',
-    #     y_axis_label='Amplitudine [mW]',
-    #     x_range=(0,duration),
-    #     y_range=(-amplitude-amplitude/3,amplitude+amplitude/3)
-    #     )
-    # noise_fig = figure(
-    #     title='Sinewave Noise',
-    #     x_axis_label='Timp [s]',
-    #     y_axis_label='Amplitudine [mW]',
-    #     x_range=(0,duration),
-    #     y_range=(-amplitude-1,amplitude+1)
-    #     )
-    # sine_noise = figure(
-    #     title='Sinewave & Noise',
-    #     x_axis_label='Timp [s]',
-    #     y_axis_label='Amplitudine [mW]',
-    #     x_range=(0,duration),
-    #     y_range=(-amplitude-1,amplitude+1)
-    #     )
     chart_signal = pd.DataFrame(y, time)
     chart_noise = pd.DataFrame(noise, time)
     chart_signoise = pd.DataFrame(signal, time)
 
-    # sine.line(time, y, legend_label='Sinewave', line_width=1)
-    # noise_fig.line(time, noise, legend_label='Noise', line_width=1)
-    # sine_noise.line(time,signal, legend_label='Signal + Noise', line_width=1)
-
     if freq <= samprate/2:
-        if option == 'Signal Only':
-            # st.bokeh_chart(sine, use_container_width=True)
-            st.area_chart(chart_signal)
-        elif option == 'Noise Only':
-            # st.bokeh_chart(noise_fig, use_container_width=True)
-            st.area_chart(chart_noise)
-        elif option == 'With Noise':
-            # st.bokeh_chart(sine_noise, use_container_width=True)
-            st.area_chart(chart_signoise)
-        
+        if option_chart == 'Line':
+            if option == 'Signal Only':
+                st.line_chart(chart_signal, use_container_width=True, height=500)
+            elif option == 'Noise Only':
+                st.line_chart(chart_noise, use_container_width=True, height=500)
+            elif option == 'With Noise':
+                st.line_chart(chart_signoise, use_container_width=True, height=500)
+        elif option_chart == 'Area':
+            if option == 'Signal Only':
+                st.area_chart(chart_signal, use_container_width=True, height=500)
+            elif option == 'Noise Only':
+                st.area_chart(chart_noise, use_container_width=True, height=500)
+            elif option == 'With Noise':
+                st.area_chart(chart_signoise, use_container_width=True, height=500)        
     elif freq < 0 or samprate <= 0 or freq >= samprate/2:
         st.error('Sample rate must be at least 2 times greater than maximum Frequency')
 
