@@ -19,9 +19,9 @@ def singleToneAnalyser():
     page_icon=None
     )
     
-    st.header("""_Wave Simulator_""")
-    st.write("""_created by Liviu Nedelcu_ :smile:""")
-    st.markdown("""<br>""", True)
+    st.sidebar.header("""Wave Simulator""")
+    st.sidebar.write("""_created by Liviu Nedelcu_ :smile:""")
+    st.sidebar.markdown("""<br>""", True)
     
     st.sidebar.header(""" Plot Type""")
     
