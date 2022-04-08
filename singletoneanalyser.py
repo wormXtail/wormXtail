@@ -18,7 +18,6 @@ def singleToneAnalyser():
     page_title='Sinewave Simulator • Streamlit', 
     page_icon=None
     )
-    
     st.sidebar.header("""Wave Simulator""")
     st.sidebar.write("""_created by Liviu Nedelcu_ :smile:""")
     st.sidebar.markdown("""<br>""", True)
