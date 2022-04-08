@@ -20,6 +20,7 @@ def singleToneAnalyser():
     )
     
     st.header("""_Wave Simulator_""")
+    st.write("""_created by Liviu Nedelcu_ :smile:""")
     
     st.sidebar.header(""" Plot Type""")
     
