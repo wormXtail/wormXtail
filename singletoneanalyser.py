@@ -9,7 +9,7 @@ Created on Fri Apr  8 10:09:44 2022
 import streamlit as st
 import numpy as np
 import pandas as pd
-import scipy
+import scipy as sp
 
 def singleToneAnalyser():
     
